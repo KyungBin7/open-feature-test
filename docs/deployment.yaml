@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: petclinic
-        image: default-route-openshift-image-registry.apps.kyobo.mtp.local/open-feature-test/spring-petclinic:latest
+        image: image-registry.openshift-image-registry.svc:5000/open-feature-test/spring-petclinic:v1.0.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
