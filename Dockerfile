@@ -5,6 +5,9 @@ FROM registry.access.redhat.com/ubi8/openjdk-17:1.20 AS builder
 USER root
 WORKDIR /app
 
+# 필요한 패키지 설치
+RUN microdnf install -y gzip tar && microdnf clean all
+
 # Maven wrapper와 pom.xml 복사
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
