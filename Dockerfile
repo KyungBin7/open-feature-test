@@ -1,5 +1,8 @@
 # Stage 1: Build
 FROM registry.access.redhat.com/ubi8/openjdk-17:1.20 AS builder
+
+# root로 전환하여 권한 작업 수행
+USER root
 WORKDIR /app
 
 # Maven wrapper와 pom.xml 복사
