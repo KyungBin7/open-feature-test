@@ -1,10 +1,13 @@
 # Stage 1: Build
-FROM eclipse-temurin:17-jdk-alpine AS builder
+FROM registry.access.redhat.com/ubi8/openjdk-17:1.20 AS builder
 WORKDIR /app
 
 # Maven wrapper와 pom.xml 복사
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
+
+# Maven wrapper에 실행 권한 부여
+RUN chmod +x ./mvnw
 
 # 의존성 다운로드 (캐싱 최적화)
 RUN ./mvnw dependency:go-offline
@@ -16,7 +19,7 @@ COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
 # Stage 2: Runtime
-FROM eclipse-temurin:17-jre-alpine
+FROM registry.access.redhat.com/ubi8/openjdk-17-runtime:1.20
 WORKDIR /app
 
 # 빌드 결과물 복사
