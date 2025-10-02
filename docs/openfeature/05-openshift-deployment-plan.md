@@ -27,7 +27,7 @@
 Namespace: open-feature-test
 ├── Deployment: spring-petclinic (2 replicas)
 │   └── Container: petclinic
-│       ├── Image: image-registry.openshift-image-registry.svc:5000/open-feature-test/spring-petclinic:v1.0.0
+│       ├── Image: default-route-openshift-image-registry.apps.kyobo.mtp.local/open-feature-test/spring-petclinic:v1.0.0
 │       ├── Port: 8080
 │       └── Resources: 512Mi-1Gi / 500m-1000m
 ├── Service: spring-petclinic (ClusterIP:8080)
@@ -319,7 +319,7 @@ spec:
     spec:
       containers:
       - name: petclinic
-        image: image-registry.openshift-image-registry.svc:5000/open-feature-test/spring-petclinic:v1.0.0
+        image: default-route-openshift-image-registry.apps.kyobo.mtp.local/open-feature-test/spring-petclinic:v1.0.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -484,8 +484,8 @@ oc start-build spring-petclinic \
   -n open-feature-test
 
 # 또는 로컬 빌드 후 푸시
-docker build -t image-registry.openshift-image-registry.svc:5000/open-feature-test/spring-petclinic:v1.0.0 .
-docker push image-registry.openshift-image-registry.svc:5000/open-feature-test/spring-petclinic:v1.0.0
+docker build -t default-route-openshift-image-registry.apps.kyobo.mtp.local/open-feature-test/spring-petclinic:v1.0.0 .
+docker push default-route-openshift-image-registry.apps.kyobo.mtp.local/open-feature-test/spring-petclinic:v1.0.0
 ```
 
 #### Step 3: 기존 Deployment Backup
@@ -558,7 +558,7 @@ oc describe pod -n open-feature-test -l app=petclinic | grep -A 10 "Containers:"
 # Containers:
 #   petclinic:
 #     Container ID:   cri-o://...
-#     Image:          image-registry.openshift-image-registry.svc:5000/open-feature-test/spring-petclinic:v1.0.0
+#     Image:          default-route-openshift-image-registry.apps.kyobo.mtp.local/open-feature-test/spring-petclinic:v1.0.0
 #     Port:           8080/TCP
 #   flagd:
 #     Container ID:   cri-o://...
