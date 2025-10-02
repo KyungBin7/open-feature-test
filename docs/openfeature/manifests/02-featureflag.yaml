@@ -16,14 +16,5 @@ spec:
         variants:
           "on": true
           "off": false
-        defaultVariant: "off"
-        targeting:
-          if:
-          - fractional:
-            - var: targetingKey
-            - - "on"
-              - 50
-            - - "off"
-              - 50
-          - "on"
-          - "off"
+        defaultVariant: "on"
+        targeting: {}
