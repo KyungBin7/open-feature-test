@@ -29,6 +29,10 @@
     <webjars-bootstrap.version>5.3.6</webjars-bootstrap.version>
     <webjars-font-awesome.version>4.7.0</webjars-font-awesome.version>
 
+    <!-- OpenFeature -->
+    <openfeature.version>1.15.1</openfeature.version>
+    <flagd-provider.version>0.11.10</flagd-provider.version>
+
     <checkstyle.version>10.25.0</checkstyle.version>
     <jacoco.version>0.8.13</jacoco.version>
     <libsass.version>0.3.4</libsass.version>
@@ -144,6 +148,20 @@
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
       <artifactId>jakarta.xml.bind-api</artifactId>
+    </dependency>
+
+    <!-- OpenFeature SDK -->
+    <dependency>
+      <groupId>dev.openfeature</groupId>
+      <artifactId>sdk</artifactId>
+      <version>${openfeature.version}</version>
+    </dependency>
+
+    <!-- flagd Provider -->
+    <dependency>
+      <groupId>dev.openfeature.contrib.providers</groupId>
+      <artifactId>flagd</artifactId>
+      <version>${flagd-provider.version}</version>
     </dependency>
 
   </dependencies>

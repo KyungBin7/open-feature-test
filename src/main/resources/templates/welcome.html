@@ -4,10 +4,223 @@
 
 <body>
 
-  <h2 th:text="#{welcome}">Welcome</h2>
-  <div class="row">
-    <div class="col-md-12">
-      <img class="img-responsive" src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" />
+  <!-- Variant A: 기존 디자인 -->
+  <div th:unless="${useNewDesign}">
+    <h2 th:text="#{welcome}">Welcome</h2>
+    <div class="row">
+      <div class="col-md-12">
+        <img class="img-responsive" src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" />
+      </div>
+    </div>
+
+    <!-- 디버깅용 버전 표시 -->
+    <div class="text-muted mt-3" style="font-size: 0.85rem;">
+      <small>
+        Version: <span th:text="${version}">v1</span> |
+        User ID: <span th:text="${#strings.substring(userId, 0, 8)}">12345678</span>
+      </small>
+    </div>
+  </div>
+
+  <!-- Variant B: macOS 스타일 새 디자인 -->
+  <div th:if="${useNewDesign}">
+    <style>
+      /* macOS 스타일 전역 설정 */
+      .macos-container {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+        color: #1d1d1f;
+      }
+
+      /* macOS 타이포그래피 */
+      .macos-title {
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        color: #1d1d1f;
+        margin-bottom: 0.5rem;
+      }
+
+      .macos-subtitle {
+        font-weight: 400;
+        letter-spacing: -0.01em;
+        color: #6e6e73;
+      }
+
+      /* macOS 스타일 카드 */
+      .macos-card {
+        background: linear-gradient(145deg, #ffffff 0%, #f5f5f7 100%);
+        border-radius: 18px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.04);
+        border: none;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .macos-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.04);
+      }
+
+      .macos-card img {
+        border-radius: 18px 18px 0 0;
+      }
+
+      /* macOS 스타일 버튼 */
+      .btn-macos-primary {
+        background: linear-gradient(180deg, #007aff 0%, #0051d5 100%);
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+        color: white;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        padding: 12px 32px;
+        transition: all 0.2s ease;
+      }
+
+      .btn-macos-primary:hover {
+        background: linear-gradient(180deg, #0051d5 0%, #003d9e 100%);
+        box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
+        transform: translateY(-2px);
+        color: white;
+      }
+
+      .btn-macos-secondary {
+        background: white;
+        border: 1.5px solid #d2d2d7;
+        border-radius: 12px;
+        color: #1d1d1f;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        padding: 12px 32px;
+        transition: all 0.2s ease;
+      }
+
+      .btn-macos-secondary:hover {
+        background: #f5f5f7;
+        border-color: #b8b8bd;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        color: #1d1d1f;
+      }
+
+      /* 특징 아이콘 섹션 */
+      .macos-feature {
+        text-align: center;
+        padding: 1.5rem;
+        transition: transform 0.2s ease;
+      }
+
+      .macos-feature:hover {
+        transform: scale(1.05);
+      }
+
+      .macos-feature-icon {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+      }
+
+      .macos-feature h5 {
+        font-weight: 600;
+        color: #1d1d1f;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
+      }
+
+      .macos-feature p {
+        color: #6e6e73;
+        font-size: 0.95rem;
+        margin: 0;
+      }
+
+      /* 애니메이션 */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease-out;
+      }
+    </style>
+
+    <div class="macos-container">
+      <!-- 헤더 섹션 -->
+      <div class="text-center mb-5 animate-fade-in-up">
+        <h1 class="display-4 macos-title">
+          🐾 Welcome to PetClinic
+        </h1>
+        <p class="lead macos-subtitle">
+          Compassionate Care for Your Furry Friends
+        </p>
+      </div>
+
+      <!-- 메인 카드 -->
+      <div class="row mb-5 animate-fade-in-up" style="animation-delay: 0.1s;">
+        <div class="col-md-8 offset-md-2">
+          <div class="card macos-card">
+            <img class="card-img-top" src="../static/resources/images/pets.png" th:src="@{/resources/images/pets.png}" alt="Happy Pets" />
+
+            <div class="card-body text-center py-4 px-4">
+              <h3 class="card-title mb-3 macos-title" style="font-size: 1.75rem;">
+                Your Pet's Health, Our Priority
+              </h3>
+              <p class="card-text mb-4 macos-subtitle" style="font-size: 1.1rem;">
+                Experience world-class veterinary care with our dedicated team of professionals. We treat your pets like family.
+              </p>
+
+              <!-- CTA 버튼 -->
+              <div class="d-grid gap-3 d-md-flex justify-content-md-center">
+                <a href="#" th:href="@{/owners/find}" class="btn btn-macos-primary btn-lg">
+                  Find Your Pet
+                </a>
+                <a href="#" th:href="@{/vets.html}" class="btn btn-macos-secondary btn-lg">
+                  Meet Our Vets
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 특징 섹션 -->
+      <div class="row mt-5 animate-fade-in-up" style="animation-delay: 0.2s;">
+        <div class="col-md-4">
+          <div class="macos-feature">
+            <div class="macos-feature-icon">🏥</div>
+            <h5>Expert Care</h5>
+            <p>Board-certified veterinarians with years of experience</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="macos-feature">
+            <div class="macos-feature-icon">⏰</div>
+            <h5>24/7 Available</h5>
+            <p>Emergency services available anytime you need us</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="macos-feature">
+            <div class="macos-feature-icon">❤️</div>
+            <h5>Compassionate</h5>
+            <p>We treat your beloved pets like our own family</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 디버깅용 버전 표시 -->
+      <div class="text-muted mt-5 text-center" style="font-size: 0.85rem;">
+        <small>
+          Version: <span th:text="${version}">v2</span> |
+          User ID: <span th:text="${#strings.substring(userId, 0, 8)}">12345678</span>
+        </small>
+      </div>
     </div>
   </div>
 
