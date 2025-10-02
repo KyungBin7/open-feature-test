@@ -6,11 +6,13 @@ OpenShift에 OpenFeature를 사용하는 Spring PetClinic 애플리케이션을 
 
 ```
 manifests/
+├── 00-serviceaccount.yaml     # ServiceAccount
 ├── 01-featureflagsource.yaml  # FeatureFlagSource CR
 ├── 02-featureflag.yaml        # FeatureFlag CR (50/50 A/B)
-├── 03-deployment.yaml         # 수정된 Deployment (Sidecar 주입)
+├── 03-deployment.yaml         # Deployment (flagd sidecar 포함)
 ├── 04-service.yaml            # Service
 ├── 05-route.yaml              # Route (OpenShift)
+├── 06-rbac.yaml               # Role & RoleBinding
 └── README.md                  # 이 파일
 ```
 
@@ -33,6 +35,22 @@ oc start-build spring-petclinic --from-dir=. --follow
 ```
 
 ### 배포 실행
+
+#### 0. ServiceAccount 및 RBAC 배포
+```bash
+# ServiceAccount 생성
+oc apply -f 00-serviceaccount.yaml
+
+# anyuid SCC 부여 (관리자 권한 필요)
+oc adm policy add-scc-to-user anyuid -z spring-petclinic -n open-feature-test
+
+# RBAC 설정 (FeatureFlag 읽기 권한)
+oc apply -f 06-rbac.yaml
+
+# 확인
+oc get sa spring-petclinic -n open-feature-test
+oc get role,rolebinding -n open-feature-test
+```
 
 #### 1. FeatureFlagSource 배포
 ```bash
@@ -73,6 +91,10 @@ oc get route spring-petclinic -n open-feature-test
 
 ### 또는 한 번에 배포
 ```bash
+# SCC 부여 먼저 (관리자 권한 필요)
+oc adm policy add-scc-to-user anyuid -z spring-petclinic -n open-feature-test
+
+# 모든 리소스 배포
 oc apply -f .
 ```
 

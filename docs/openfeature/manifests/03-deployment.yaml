@@ -22,9 +22,8 @@ spec:
       labels:
         app: petclinic
       annotations:
-        # OpenFeature Operator - Sidecar Injection
-        openfeature.dev/enabled: "true"
-        openfeature.dev/featureflagsource: "petclinic-flags"
+        # OpenFeature Operator - Sidecar 자동 주입 비활성화 (수동 정의 사용)
+        openfeature.dev/enabled: "false"
     spec:
       serviceAccountName: spring-petclinic
       containers:
@@ -70,10 +69,36 @@ spec:
           periodSeconds: 5
           timeoutSeconds: 3
           failureThreshold: 3
-      # flagd Sidecar는 OpenFeature Operator가 자동 주입
-      # 주입되는 컨테이너:
-      # - name: flagd
-      #   image: ghcr.io/open-feature/flagd:latest
-      #   ports:
-      #   - containerPort: 8013 (gRPC)
-      #   - containerPort: 8014 (HTTP/Metrics)
+      # flagd Sidecar - 수동 정의 (OpenShift SCC 호환)
+      - name: flagd
+        image: ghcr.io/open-feature/flagd:latest
+        args:
+        - start
+        - --uri
+        - core.openfeature.dev/open-feature-test/welcome-flags
+        ports:
+        - containerPort: 8013
+          name: grpc
+          protocol: TCP
+        - containerPort: 8014
+          name: metrics
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8014
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8014
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
