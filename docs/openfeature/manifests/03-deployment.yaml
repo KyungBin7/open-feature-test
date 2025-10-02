@@ -6,7 +6,7 @@ metadata:
   labels:
     app: petclinic
     app.kubernetes.io/name: petclinic
-    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/version: "2.0.0"
 spec:
   replicas: 2
   strategy:
@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: petclinic
-        image: image-registry.openshift-image-registry.svc:5000/open-feature-test/spring-petclinic:v1.0.0
+        image: image-registry.openshift-image-registry.svc:5000/open-feature-test/spring-petclinic:v2.0.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8080

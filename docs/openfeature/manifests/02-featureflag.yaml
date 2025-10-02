@@ -14,16 +14,16 @@ spec:
       welcome-page-redesign:
         state: ENABLED
         variants:
-          on: true
-          off: false
-        defaultVariant: off
+          "on": true
+          "off": false
+        defaultVariant: "off"
         targeting:
           if:
           - fractional:
             - var: targetingKey
-            - - on
+            - - "on"
               - 50
-            - - off
+            - - "off"
               - 50
-          - on
-          - off
+          - "on"
+          - "off"
