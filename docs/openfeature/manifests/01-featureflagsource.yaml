@@ -12,3 +12,12 @@ spec:
   - source: welcome-flags
     provider: kubernetes
   evaluator: json
+  # Sidecar 설정 커스터마이징 (OpenShift SCC 대응)
+  debugLogging: false
+  rolloutOnChange: true
+  syncProviderArgs: []
+  defaultSyncProvider: kubernetes
+  # flagd sidecar 설정
+  envVars: []
+  # SecurityContext 제거 (OpenShift restricted SCC 사용)
+  # runAsUser, seccomp 등 제거
