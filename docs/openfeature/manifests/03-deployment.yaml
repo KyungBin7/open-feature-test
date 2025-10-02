@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-petclinic
+  namespace: open-feature-test
+  labels:
+    app: petclinic
+    app.kubernetes.io/name: petclinic
+    app.kubernetes.io/version: "1.0.0"
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: petclinic
+  template:
+    metadata:
+      labels:
+        app: petclinic
+      annotations:
+        # OpenFeature Operator - Sidecar Injection
+        openfeature.dev/enabled: "true"
+        openfeature.dev/featureflagsource: "petclinic-flags"
+    spec:
+      containers:
+      - name: petclinic
+        image: image-registry.openshift-image-registry.svc:5000/open-feature-test/spring-petclinic:v1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+          name: http
+        env:
+        - name: JAVA_OPTS
+          value: "-Xmx512m -Xms256m"
+        # OpenFeature 환경 변수
+        - name: OPENFEATURE_FLAGD_HOST
+          value: "localhost"  # Sidecar는 localhost
+        - name: OPENFEATURE_FLAGD_PORT
+          value: "8013"
+        - name: LOGGING_LEVEL_DEV_OPENFEATURE
+          value: "DEBUG"
+        - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SAMPLES_PETCLINIC_SYSTEM_WELCOMECONTROLLER
+          value: "DEBUG"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      # flagd Sidecar는 OpenFeature Operator가 자동 주입
+      # 주입되는 컨테이너:
+      # - name: flagd
+      #   image: ghcr.io/open-feature/flagd:latest
+      #   ports:
+      #   - containerPort: 8013 (gRPC)
+      #   - containerPort: 8014 (HTTP/Metrics)

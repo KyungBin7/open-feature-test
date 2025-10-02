@@ -1,0 +1,14 @@
+apiVersion: core.openfeature.dev/v1beta1
+kind: FeatureFlagSource
+metadata:
+  name: petclinic-flags
+  namespace: open-feature-test
+  labels:
+    app: petclinic
+    app.kubernetes.io/name: petclinic
+    app.kubernetes.io/component: feature-flags
+spec:
+  sources:
+  - source: welcome-flags
+    provider: kubernetes
+  evaluator: json
